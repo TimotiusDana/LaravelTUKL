@@ -72,4 +72,19 @@ class InventoriesController extends Controller
         //redirect to index
         return redirect()->route('inventories.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
+
+    /**
+     * show
+     *
+     * @param  mixed $id
+     * @return View
+     */
+    public function show(string $id): View
+    {
+        //get product by ID
+        $inventories = Inventories::findOrFail($id);
+
+        //render view with product
+        return view('inventories.show', compact('inventories'));
+    }
 }
