@@ -1,66 +1,131 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Inventaris TUKL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 15px;
+        }
+        .table img {
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            border-top: none;
+            font-weight: 600;
+            color: #495057;
+        }
+    </style>
 </head>
-<body style="background: lightgray">
+<body>
 
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-12">
                 <div>
-                    <h3 class="text-center my-4">Situs Inventaris TUKL</h3>
-                    <h5 class="text-center">Hanya untuk internal IT</h5>
-                    <hr>
+                    <h3 class="text-center my-4 text-primary">Situs Inventaris TUKL</h3>
+                    <h5 class="text-center text-muted mb-4">Hanya untuk internal IT</h5>
+                    <hr class="mb-4">
                 </div>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
                         <a href="{{ route('inventories.create') }}" class="btn btn-md btn-success mb-3">Tambah Inventaris</a>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Gambar</th>
-                                    <th scope="col">Kode Item</th>
-                                    <th scope="col">Nama Item</th>
-                                    <th scope="col">People in Charge</th>
-                                    <th scope="col">Lokasi</th>
-                                    <th scope="col">Penjelasan</th>
-                                    <th scope="col">Harga</th>
-                                    <th scope="col">Jumlah</th>
-                                    <th scope="col" style="width: 20%">ACTIONS</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($inventories as $inventories)
+                        
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
                                     <tr>
-                                        <td class="text-center">
-                                            <img src="{{ asset('/storage/products/'.$product->image) }}" class="rounded" style="width: 150px">
-                                        </td>
-                                        <td>{{ $product->title }}</td>
-                                        <td>{{ "Rp " . number_format($product->price,2,',','.') }}</td>
-                                        <td>{{ $product->stock }}</td>
-                                        <td class="text-center">
-                                            <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('products.destroy', $product->id) }}" method="POST">
-                                                <a href="{{ route('inventories.show', $product->id) }}" class="btn btn-sm btn-dark">SHOW</a>
-                                                <a href="{{ route('inventories.edit', $product->id) }}" class="btn btn-sm btn-primary">EDIT</a>
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-danger">HAPUS</button>
-                                            </form>
-                                        </td>
+                                        <th scope="col" class="text-center" style="width: 120px;">Gambar</th>
+                                        <th scope="col">Kode Item</th>
+                                        <th scope="col">Nama Item</th>
+                                        <th scope="col">People in Charge</th>
+                                        <th scope="col">Lokasi</th>
+                                        <th scope="col">Penjelasan</th>
+                                        <th scope="col">Harga</th>
+                                        <th scope="col" class="text-center">Jumlah</th>
+                                        <th scope="col" class="text-center" style="width: 20%">Actions</th>
                                     </tr>
-                                @empty
-                                    <div class="alert alert-danger">
-                                        Data Inventaris tidak ada atau belum ada.
-                                    </div>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        {{ $inventories->links() }}
+                                </thead>
+                                <tbody>
+                                    @forelse ($inventories as $inventory)
+                                        <tr>
+                                            <td class="text-center">
+                                                <img src="{{ asset('/storage/inventories/'.$inventory->image) }}" 
+                                                     class="rounded" 
+                                                     style="width: 100px; height: 80px; object-fit: cover;" 
+                                                     alt="Gambar {{ $inventory->item_name }}">
+                                            </td>
+                                            <td>{{ $inventory->item_code }}</td>
+                                            <td>{{ $inventory->item_name }}</td>
+                                            <td>{{ $inventory->pic }}</td>
+                                            <td>{{ $inventory->location }}</td>
+                                            <td>{{ Str::limit($inventory->description, 50) }}</td>
+                                            <td class="text-success fw-bold">{{ "Rp " . number_format($inventory->price, 0, ',', '.') }}</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-primary">{{ $inventory->stock }}</span>
+                                            </td>
+                                            <td class="text-center">
+                                                <div class="btn-group" role="group">
+                                                    <a href="{{ route('inventories.show', $inventory->id) }}" 
+                                                       class="btn btn-sm btn-outline-info" 
+                                                       title="Lihat Detail">
+                                                        👁️
+                                                    </a>
+                                                    <a href="{{ route('inventories.edit', $inventory->id) }}" 
+                                                       class="btn btn-sm btn-outline-warning" 
+                                                       title="Edit">
+                                                        ✏️
+                                                    </a>
+                                                    <form onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?');" 
+                                                          action="{{ route('inventories.destroy', $inventory->id) }}" 
+                                                          method="POST" 
+                                                          class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" 
+                                                                class="btn btn-sm btn-outline-danger" 
+                                                                title="Hapus">
+                                                            🗑️
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="9" class="text-center">
+                                                <div class="alert alert-info m-0">
+                                                    <i class="bi bi-info-circle"></i>
+                                                    Data Inventaris belum ada. 
+                                                    <a href="{{ route('inventories.create') }}" class="alert-link">Tambah inventaris pertama</a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        @if($inventories->hasPages())
+                            <div class="d-flex justify-content-center mt-3">
+                                {{ $inventories->links() }}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -71,7 +136,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        //message with sweetalert
+        // Message with sweetalert
         @if(session('success'))
             Swal.fire({
                 icon: "success",
@@ -89,7 +154,6 @@
                 timer: 2000
             });
         @endif
-
     </script>
 
 </body>
