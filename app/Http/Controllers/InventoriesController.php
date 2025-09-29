@@ -112,51 +112,53 @@ class InventoriesController extends Controller
      */
 
     public function update(Request $request, $id): RedirectResponse
-    {
-        //validate form
-        $request->validate([
-            'image'         => 'image|mimes:jpeg,jpg,png|max:2048',
-            'item_code'         => 'min:5',
-            'item_name'         => 'required|min:5',
-            'pic'         => 'required|min:2',
-            'location'      => 'required|min:3',
-            'description'   => 'required|min:10',
-            'price'         => 'required|numeric',
-            'stock'         => 'required|numeric'
+{
+    //validate form
+    $request->validate([
+        'image'         => 'nullable|image|mimes:jpeg,jpg,png|max:2048',
+        'item_code'     => 'required|min:5',
+        'item_name'     => 'required|min:5',
+        'pic'           => 'required|min:2',
+        'location'      => 'required|min:3',
+        'description'   => 'required|min:10',
+        'price'         => 'required|numeric',
+        'stock'         => 'required|numeric'
+    ]);
+
+    $inventories = Inventories::findOrFail($id);
+
+    if ($request->hasFile('image')) {
+        // Delete old image
+        Storage::delete('inventories/'.$inventories->image);
+
+        // Upload new image
+        $image = $request->file('image');
+        $image->storeAs('inventories', $image->hashName());
+
+        // Update with new image - GUNAKAN DATA DARI $request
+        $inventories->update([
+            'image'         => $image->hashName(),
+            'item_code'     => $request->item_code,
+            'item_name'     => $request->item_name,
+            'pic'           => $request->pic,
+            'location'      => $request->location,
+            'description'   => $request->description,
+            'price'         => $request->price,
+            'stock'         => $request->stock
         ]);
-
-        $inventories = Inventories::findOrFail($id);
-
-        if ($request->hasFile('image')){
-
-            Storage::delete('inventories/'.$inventories->image);
-
-            $image = $request->file('image');
-            $image->storeAs('inventories', $image->hashName);
-
-            $inventories->update([
-            'image'         => 'required|image|mimes:jpeg,jpg,png|max:2048',
-            'item_code'         => 'required|min:5',
-            'item_name'         => 'required|min:5',
-            'pic'         => 'required|min:2',
-            'location'      => 'required|min:3',
-            'description'   => 'required|min:10',
-            'price'         => 'required|numeric',
-            'stock'         => 'required|numeric'
+    } else {
+        // Update without image - GUNAKAN DATA DARI $request
+        $inventories->update([
+            'item_code'     => $request->item_code,
+            'item_name'     => $request->item_name,
+            'pic'           => $request->pic,
+            'location'      => $request->location,
+            'description'   => $request->description,
+            'price'         => $request->price,
+            'stock'         => $request->stock
         ]);
-
-        } else {
-           $inventories->update([
-            'item_code'         => 'required|min:5',
-            'item_name'         => 'required|min:5',
-            'pic'         => 'required|min:2',
-            'location'      => 'required|min:3',
-            'description'   => 'required|min:10',
-            'price'         => 'required|numeric',
-            'stock'         => 'required|numeric'
-        ]); 
-        }
-
-         return redirect()->route('inventories.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
+
+    return redirect()->route('inventories.index')->with(['success' => 'Data Berhasil Diubah!']);
+}
 }
