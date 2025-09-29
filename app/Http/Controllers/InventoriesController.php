@@ -6,6 +6,7 @@ use App\Models\Inventories;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class InventoriesController extends Controller
 {
@@ -86,5 +87,76 @@ class InventoriesController extends Controller
 
         //render view with product
         return view('inventories.show', compact('inventories'));
+    }
+
+
+    /**
+     * edit
+     * 
+     * @param mixed $id
+     * @return View 
+     */
+    public function edit(string $id): View
+    {
+        $inventories = Inventories::findOrFail($id);
+
+        return view('inventories.edit', compact('inventories'));
+    }
+
+    /**
+     * update
+     * 
+     * @param mixed $request
+     * @param mixed $id
+     * @return RedirectResponse
+     */
+
+    public function update(Request $request, $id): RedirectResponse
+    {
+        //validate form
+        $request->validate([
+            'image'         => 'image|mimes:jpeg,jpg,png|max:2048',
+            'item_code'         => 'min:5',
+            'item_name'         => 'required|min:5',
+            'pic'         => 'required|min:2',
+            'location'      => 'required|min:3',
+            'description'   => 'required|min:10',
+            'price'         => 'required|numeric',
+            'stock'         => 'required|numeric'
+        ]);
+
+        $inventories = Inventories::findOrFail($id);
+
+        if ($request->hasFile('image')){
+
+            Storage::delete('inventories/'.$inventories->image);
+
+            $image = $request->file('image');
+            $image->storeAs('inventories', $image->hashName);
+
+            $inventories->update([
+            'image'         => 'required|image|mimes:jpeg,jpg,png|max:2048',
+            'item_code'         => 'required|min:5',
+            'item_name'         => 'required|min:5',
+            'pic'         => 'required|min:2',
+            'location'      => 'required|min:3',
+            'description'   => 'required|min:10',
+            'price'         => 'required|numeric',
+            'stock'         => 'required|numeric'
+        ]);
+
+        } else {
+           $inventories->update([
+            'item_code'         => 'required|min:5',
+            'item_name'         => 'required|min:5',
+            'pic'         => 'required|min:2',
+            'location'      => 'required|min:3',
+            'description'   => 'required|min:10',
+            'price'         => 'required|numeric',
+            'stock'         => 'required|numeric'
+        ]); 
+        }
+
+         return redirect()->route('inventories.index')->with(['success' => 'Data Berhasil Diubah!']);
     }
 }

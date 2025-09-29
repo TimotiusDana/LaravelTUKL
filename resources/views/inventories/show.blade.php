@@ -26,10 +26,12 @@
                         <hr/>
                         <p>People in Charge : {{ $inventories->pic }}</p>
                         <p>Lokasi : {{ $inventories->location }}</p>
-                        <p>{{ "Rp " . number_format($inventories->price,2,',','.') }}</p>
+                        <p>Price : {{ "Rp " . number_format($inventories->price,2,',','.') }}</p>
                         <p>Stock : {{ $inventories->stock }}</p>
                         <hr/>
                         <p>{!! $inventories->description !!}</p>
+
+                        <button type="button" class="btn btn-md btn-primary me-3" onclick="window.location='{{ route('inventories.index') }}'">Kembali</button>
                     </div>
                 </div>
             </div>
