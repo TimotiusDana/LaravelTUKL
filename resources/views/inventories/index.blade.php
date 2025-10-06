@@ -41,6 +41,18 @@
                     <h5 class="text-center text-muted mb-4">Hanya untuk internal IT</h5>
                     <hr class="mb-4">
                 </div>
+
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Daftar PIC</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Report</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#">Log Out</a>
+                    </li>
+                    </ul>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
                         <a href="{{ route('inventories.create') }}" class="btn btn-md btn-success mb-3">Tambah Inventaris</a>
@@ -83,12 +95,12 @@
                                                     <a href="{{ route('inventories.show', $inventory->id) }}" 
                                                        class="btn btn-sm btn-outline-info" 
                                                        title="Lihat Detail">
-                                                        👁️
+                                                        👁️ Lihat
                                                     </a>
                                                     <a href="{{ route('inventories.edit', $inventory->id) }}" 
                                                        class="btn btn-sm btn-outline-warning" 
                                                        title="Edit">
-                                                        ✏️
+                                                        ✏️ Ubah
                                                     </a>
                                                     <form onsubmit="return confirm('Apakah Anda yakin ingin menghapus item ini?');" 
                                                           action="{{ route('inventories.destroy', $inventory->id) }}" 
@@ -99,7 +111,7 @@
                                                         <button type="submit" 
                                                                 class="btn btn-sm btn-outline-danger" 
                                                                 title="Hapus">
-                                                            🗑️
+                                                            🗑️ Hapus
                                                         </button>
                                                     </form>
                                                 </div>

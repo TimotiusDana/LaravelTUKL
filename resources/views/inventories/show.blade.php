@@ -18,7 +18,11 @@
                     </div>
                 </div>
             </div>
+
+           
+
             <div class="col-md-8">
+                 <button type="button" class="btn btn-md btn-primary me-3" onclick="window.location='{{ route('inventories.index') }}'">Kembali</button>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
                         <p>{{ $inventories->item_code }}</p>
@@ -31,7 +35,7 @@
                         <hr/>
                         <p>{!! $inventories->description !!}</p>
 
-                        <button type="button" class="btn btn-md btn-primary me-3" onclick="window.location='{{ route('inventories.index') }}'">Kembali</button>
+                        <button type="button" class="btn btn-md btn-success me-3" onclick="window.location='{{ route('inventories.edit',$inventories->id) }}'">Ubah</button>
                     </div>
                 </div>
             </div>

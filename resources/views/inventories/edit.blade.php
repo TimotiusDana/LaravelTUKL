@@ -121,7 +121,7 @@
                                 </div>
                             </div>
 
-                            <button type="submit" class="btn btn-md btn-primary me-3">UPDATE</button>
+                            <button type="submit" class="btn btn-md btn-primary me-3">Update</button>
                             <button type="button" class="btn btn-md btn-info me-3" onclick="window.location='{{ route('inventories.show', $inventories->id) }}'">Detail Lama</button>
                              <button type="button" class="btn btn-md btn-primary me-3" onclick="window.location='{{ route('inventories.index') }}'">Kembali</button>
 
