@@ -43,16 +43,18 @@
                 </div>
 
                 <ul class="nav justify-content-end">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Daftar PIC</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Report</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Log Out</a>
-                    </li>
-                    </ul>
+    <li class="nav-item">
+        <a class="nav-link text-danger" href="{{ route('logout') }}"
+           onclick="event.preventDefault();
+                     document.getElementById('logout-form').submit();">
+            Log Out
+        </a>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+        </li>
+</ul>
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
                         <a href="{{ route('inventories.create') }}" class="btn btn-md btn-success mb-3">Tambah Inventaris</a>
@@ -91,7 +93,7 @@
                                                 <span class="badge bg-primary">{{ $inventory->stock }}</span>
                                             </td>
                                             <td class="text-center">
-                                                <div class="btn-group" role="group">
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                                                     <a href="{{ route('inventories.show', $inventory->id) }}" 
                                                        class="btn btn-sm btn-outline-info" 
                                                        title="Lihat Detail">
