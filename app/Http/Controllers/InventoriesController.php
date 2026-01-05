@@ -7,6 +7,8 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class InventoriesController extends Controller
 {
@@ -161,4 +163,36 @@ class InventoriesController extends Controller
 
     return redirect()->route('inventories.index')->with(['success' => 'Data Berhasil Diubah!']);
 }
+
+/**
+     * exportPdf
+     *
+     * @return mixed
+     */
+    public function exportPdf()
+    {
+        
+        $inventories = Inventories::all();
+
+        
+        $html = view('inventories.pdf', compact('inventories'))->render();
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true); 
+        $options->set('defaultFont', 'sans-serif');
+        
+        $dompdf = new Dompdf($options);
+
+    
+        $dompdf->loadHtml($html);
+
+     
+        $dompdf->setPaper('A4', 'landscape');
+
+        
+        $dompdf->render();
+
+        
+        return $dompdf->stream('laporan-inventaris-tukl.pdf');
+    }
 }

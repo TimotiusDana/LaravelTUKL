@@ -42,25 +42,38 @@
                     <hr class="mb-4">
                 </div>
 
-                <ul class="nav justify-content-end">
-    <li class="nav-item">
-        <a class="nav-link text-danger" href="{{ route('logout') }}"
-           onclick="event.preventDefault();
-                     document.getElementById('logout-form').submit();">
-            Log Out
-        </a>
+                <ul class="nav justify-content-end mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-danger fw-bold" href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                     document.getElementById('logout-form').submit();">
+                            Log Out
+                        </a>
 
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-            @csrf
-        </form>
-        </li>
-</ul>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                            @csrf
+                        </form>
+                    </li>
+                </ul>
+
                 <div class="card border-0 shadow-sm rounded">
                     <div class="card-body">
-                        <a href="{{ route('inventories.create') }}" class="btn btn-md btn-success mb-3">Tambah Inventaris</a>
                         
+                        
+                        <div class="d-flex justify-content-between mb-3">
+                            <div>
+                                <a href="{{ route('inventories.create') }}" class="btn btn-md btn-success me-2">
+                                    <i class="bi bi-plus-circle"></i> Tambah Inventaris
+                                </a>
+                                <a href="{{ route('inventories.exportPdf') }}" target="_blank" class="btn btn-md btn-danger">
+                                    📄 Export PDF
+                                </a>
+                            </div>
+                        </div>
+                        
+
                         <div class="table-responsive">
-                            <table class="table table-bordered table-hover">
+                            <table class="table table-bordered table-hover align-middle">
                                 <thead class="table-light">
                                     <tr>
                                         <th scope="col" class="text-center" style="width: 120px;">Gambar</th>
@@ -123,7 +136,6 @@
                                         <tr>
                                             <td colspan="9" class="text-center">
                                                 <div class="alert alert-info m-0">
-                                                    <i class="bi bi-info-circle"></i>
                                                     Data Inventaris belum ada. 
                                                     <a href="{{ route('inventories.create') }}" class="alert-link">Tambah inventaris pertama</a>
                                                 </div>
@@ -134,7 +146,6 @@
                             </table>
                         </div>
                         
-                        <!-- Pagination -->
                         @if($inventories->hasPages())
                             <div class="d-flex justify-content-center mt-3">
                                 {{ $inventories->links() }}
@@ -150,7 +161,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // Message with sweetalert
+        
         @if(session('success'))
             Swal.fire({
                 icon: "success",
